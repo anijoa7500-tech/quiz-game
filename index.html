@@ -1,175 +1,290 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<title>커뮨33 메뉴</title>
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
-<style>
-body {
-    margin:0;
-    font-family: 'Noto Sans KR', sans-serif;
-    background:#1e1e1e;
-    color:white;
+function IconBase({ children, className = "h-5 w-5 text-stone-200" }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      {children}
+    </svg>
+  );
 }
 
-.container {
-    max-width:1000px;
-    margin:50px auto;
+function LinkIcon(props) {
+  return (
+    <IconBase {...props}>
+      <path d="M10 14L21 3" />
+      <path d="M15 3h6v6" />
+      <path d="M21 14v4a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h4" />
+    </IconBase>
+  );
 }
 
-.title {
-    text-align:center;
-    font-size:40px;
-    margin-bottom:30px;
+function StarIcon(props) {
+  return (
+    <IconBase {...props}>
+      <path d="M12 3.5l2.6 5.26 5.8.84-4.2 4.1.99 5.8L12 16.9l-5.19 2.6.99-5.8-4.2-4.1 5.8-.84L12 3.5z" />
+    </IconBase>
+  );
 }
 
-.menu-grid {
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    gap:20px;
+function FlameIcon(props) {
+  return (
+    <IconBase {...props}>
+      <path d="M12 3s3 2.3 3 5.2c0 1.7-.85 2.8-1.8 3.74-.96.95-1.95 1.84-1.95 3.56A2.75 2.75 0 0 0 14 18.25c2.62 0 4.75-2.2 4.75-5.14 0-5.1-4.46-8.61-6.75-10.11z" />
+      <path d="M9.5 11.5c-1.67 1.05-3.25 2.79-3.25 5.18A4.57 4.57 0 0 0 10.8 21c2.3 0 4.2-1.83 4.2-4.08 0-2.52-1.69-3.94-3.35-5.42" />
+    </IconBase>
+  );
 }
 
-.menu {
-    background:#2c2c2c;
-    border-radius:15px;
-    padding:15px;
-    display:flex;
-    gap:15px;
-    align-items:center;
+function MapPinIcon(props) {
+  return (
+    <IconBase {...props}>
+      <path d="M12 21s6-5.4 6-11a6 6 0 1 0-12 0c0 5.6 6 11 6 11z" />
+      <circle cx="12" cy="10" r="2.2" />
+    </IconBase>
+  );
 }
 
-.menu img {
-    width:120px;
-    height:120px;
-    border-radius:10px;
-    object-fit:cover;
+function PhoneIcon(props) {
+  return (
+    <IconBase {...props}>
+      <path d="M22 16.9v3a2 2 0 0 1-2.18 2A19.8 19.8 0 0 1 11.2 18.8 19.5 19.5 0 0 1 5.2 12.8 19.8 19.8 0 0 1 2.1 4.18 2 2 0 0 1 4.09 2h3a2 2 0 0 1 2 1.72c.12.9.34 1.78.66 2.62a2 2 0 0 1-.45 2.11L8 9.8a16 16 0 0 0 6.2 6.2l1.35-1.3a2 2 0 0 1 2.11-.45c.84.32 1.72.54 2.62.66A2 2 0 0 1 22 16.9z" />
+    </IconBase>
+  );
 }
 
-.menu-info {
-    flex:1;
+function InstagramIcon(props) {
+  return (
+    <IconBase {...props}>
+      <rect x="3.5" y="3.5" width="17" height="17" rx="4.5" />
+      <circle cx="12" cy="12" r="3.8" />
+      <circle cx="17.3" cy="6.7" r="0.9" fill="currentColor" stroke="none" />
+    </IconBase>
+  );
 }
 
-.name {
-    font-size:18px;
-    font-weight:bold;
+const links = [
+  {
+    title: "대표메뉴 보러가기",
+    subtitle: "메뉴 사이트 바로 연결",
+    href: "#",
+    icon: LinkIcon,
+    tag: "MAIN",
+  },
+  {
+    title: "BEST 메뉴",
+    subtitle: "숯불 닭구이 · 해물 꽃게탕",
+    href: "#",
+    icon: StarIcon,
+    tag: "BEST",
+  },
+  {
+    title: "HOT 메뉴",
+    subtitle: "돼지 김치찌개 · 마라차돌볶음",
+    href: "#",
+    icon: FlameIcon,
+    tag: "HOT",
+  },
+  {
+    title: "오시는 길",
+    subtitle: "지도 및 주차 안내",
+    href: "#",
+    icon: MapPinIcon,
+    tag: "MAP",
+  },
+  {
+    title: "예약 문의",
+    subtitle: "전화로 빠르게 문의",
+    href: "tel:010-0000-0000",
+    icon: PhoneIcon,
+    tag: "CALL",
+  },
+  {
+    title: "인스타그램",
+    subtitle: "신메뉴와 매장 분위기 보기",
+    href: "#",
+    icon: InstagramIcon,
+    tag: "SNS",
+  },
+];
+
+const menuPreview = [
+  { name: "숯불 닭구이", price: "21,000", tag: "BEST", img: "https://img.siksinhot.com/seeon/1668661825634032.jpg" },
+  { name: "해물 꽃게탕", price: "21,000", tag: "BEST", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfgZi7nrYGuqke-CJgBbix-dWDLr2IAzdWlQ&s" },
+  { name: "육회", price: "19,000", tag: "MAIN", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1-PPYJxfNZLlX1QS54PF4GH82RRTNvEZUiA&s" },
+  { name: "돼지 김치찌개", price: "19,000", tag: "HOT", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRihhu5mEBq5NGkI8HRhiie9kilzIqDoqkGw&s" },
+  { name: "소세지야채볶음", price: "17,000", tag: "MAIN", img: "https://recipe1.ezmember.co.kr/cache/recipe/2019/04/03/ee34a886695dd69c8df2996d27671be51.jpg" },
+  { name: "순살치킨", price: "17,000", tag: "MAIN", img: "https://i.namu.wiki/i/AkGaswkjoovQvcJwqxNCphRSyJLoWxUMnO6gr_0vayxcqMkGS7u6gaKQQqDdVsMgm74tbfr_opEX8Q0ALUeSSA.webp" },
+  { name: "마라차돌볶음", price: "17,000", tag: "HOT", img: "https://recipe1.ezmember.co.kr/cache/recipe/2020/06/04/cf1a132a449a47861ccf600fb126be241.jpg" },
+  { name: "윙 & 봉 샐러드", price: "17,000", tag: "MAIN", img: "https://mblogthumb-phinf.pstatic.net/MjAyNDA3MTZfMSAg/MDAxNzIxMTEwMzIyMjA4.h5yHdBzBMkqDWgeb9AQWKH7Xi-TnIGrt4pDZnkogIh8g.INBgAFxh2KOp1gSdxfDWDcRtGezk2N6y9PGW_5TmMd8g.JPEG/SE-8341b4e9-49cf-4fc7-bdb3-fd614e6056ee.jpg?type=w800" },
+];
+
+const dataValidationChecks = [
+  {
+    name: "links have required fields",
+    pass: links.every((item) => item.title && item.subtitle && item.href && item.icon && item.tag),
+  },
+  {
+    name: "menu items have required fields",
+    pass: menuPreview.every((item) => item.name && item.price && item.tag && item.img),
+  },
+  {
+    name: "menu preview contains at least 6 items",
+    pass: menuPreview.length >= 6,
+  },
+];
+
+const failedCheck = dataValidationChecks.find((check) => !check.pass);
+if (failedCheck) {
+  throw new Error(`Commune33BeaconDesign data validation failed: ${failedCheck.name}`);
 }
 
-.desc {
-    font-size:13px;
-    color:#aaa;
+function Rivet({ className = "" }) {
+  return (
+    <div
+      className={`absolute h-3 w-3 rounded-full border border-stone-700 bg-[radial-gradient(circle_at_30%_30%,#d6d3d1,#57534e_55%,#292524)] shadow-sm ${className}`}
+      aria-hidden="true"
+    />
+  );
 }
 
-.price {
-    color:#ff4d4d;
-    font-size:18px;
-    font-weight:bold;
-    margin-top:5px;
+function MenuCard({ item }) {
+  return (
+    <div className="rounded-2xl border border-stone-500/35 bg-[linear-gradient(145deg,rgba(95,88,82,0.18),rgba(24,24,24,0.88))] overflow-hidden">
+      <img
+        src={item.img}
+        alt={item.name}
+        className="w-full h-24 object-cover"
+        loading="lazy"
+        onError={(e) => {
+          e.currentTarget.src = "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80";
+        }}
+      />
+      <div className="px-3 py-3">
+        <div className="flex items-start justify-between gap-2">
+          <p className="text-sm font-bold leading-5 text-stone-100">{item.name}</p>
+          <span className="rounded-full bg-red-500/15 px-2 py-0.5 text-[10px] font-bold text-red-300">
+            {item.tag}
+          </span>
+        </div>
+        <p className="mt-2 text-base font-black text-[#d3483e]">{item.price}원</p>
+      </div>
+    </div>
+  );
 }
-</style>
 
-</head>
+export default function Commune33BeaconDesign() {
+  return (
+    <div className="min-h-screen bg-[#1b1a19] text-stone-100 relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.10),transparent_30%),linear-gradient(to_bottom,rgba(255,255,255,0.03),transparent_25%)]" />
+      <div className="absolute inset-0 opacity-25 bg-[linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:24px_24px]" />
 
-<body>
+      <main className="relative mx-auto max-w-md px-4 py-8">
+        <div className="relative rounded-[2rem] border border-stone-500/60 bg-gradient-to-b from-stone-500/20 via-zinc-800/95 to-zinc-950 shadow-[0_20px_60px_rgba(0,0,0,0.55)] overflow-hidden backdrop-blur-sm">
+          <Rivet className="left-4 top-4" />
+          <Rivet className="right-4 top-4" />
+          <Rivet className="left-4 bottom-4" />
+          <Rivet className="right-4 bottom-4" />
 
-<div class="container">
+          <div className="p-4 border-b border-stone-500/40 bg-black/20">
+            <div className="rounded-[1.5rem] border border-stone-400/50 bg-[linear-gradient(145deg,rgba(180,170,160,0.35),rgba(60,55,50,0.55))] p-5 shadow-inner relative overflow-hidden">
+              <div className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.4),transparent_20%),radial-gradient(circle_at_80%_0%,rgba(255,255,255,0.25),transparent_18%)]" />
+              <div className="relative text-center">
+                <div className="text-stone-300 text-xl tracking-[0.6em] mb-2">🌾</div>
+                <h1 className="text-4xl font-black tracking-[0.18em] text-stone-100">커:뮨33</h1>
+                <p className="mt-2 text-sm tracking-[0.35em] text-stone-300">COMMUNE 33</p>
+              </div>
+            </div>
+          </div>
 
-<div class="title">🍺 커뮨33 MENU</div>
+          <section className="px-5 pt-6 text-center">
+            <div className="inline-flex items-center rounded-full border border-red-400/40 bg-red-500/10 px-3 py-1 text-[11px] font-bold tracking-[0.25em] text-red-300">
+              INDUSTRIAL MENU BEACON
+            </div>
+            <h2 className="mt-4 text-2xl font-extrabold leading-tight text-stone-100">
+              메뉴판 무드 그대로,
+              <br />
+              비컨 첫 화면 디자인
+            </h2>
+            <p className="mt-3 text-sm leading-6 text-stone-300">
+              철판 간판 느낌의 헤더와 리벳 포인트를 살려서
+              실제 메뉴판과 연결감 있는 비컨 스타일로 구성했습니다.
+            </p>
+          </section>
 
-<div class="menu-grid">
+          <section className="px-4 pt-5 space-y-3">
+            {links.map((item) => {
+              const Icon = item.icon;
+              return (
+                <a
+                  key={item.title}
+                  href={item.href}
+                  className="block"
+                  target={item.href.startsWith("http") ? "_blank" : undefined}
+                  rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+                >
+                  <Card className="group rounded-[1.4rem] border border-stone-500/50 bg-[linear-gradient(145deg,rgba(125,115,105,0.25),rgba(35,35,35,0.95))] transition-all duration-300 hover:-translate-y-0.5 hover:border-red-400/45 hover:shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
+                    <CardContent className="p-4 flex items-center gap-4">
+                      <div className="h-12 w-12 shrink-0 rounded-2xl border border-stone-400/40 bg-black/20 flex items-center justify-center">
+                        <Icon className="h-5 w-5 text-stone-200" />
+                      </div>
 
-<div class="menu">
-<img src="https://source.unsplash.com/400x400/?chicken" >
-<div class="menu-info">
-<div class="name">숯불 닭구이</div>
-<div class="desc">Charcoal grilled chicken</div>
-<div class="price">21,000원</div>
-</div>
-</div>
+                      <div className="min-w-0 flex-1 text-left">
+                        <div className="flex items-center gap-2">
+                          <p className="text-base font-bold text-stone-100 truncate">{item.title}</p>
+                          <span className="rounded-full border border-stone-400/40 bg-black/20 px-2 py-0.5 text-[10px] font-bold tracking-[0.2em] text-stone-300">
+                            {item.tag}
+                          </span>
+                        </div>
+                        <p className="mt-1 text-sm text-stone-300">{item.subtitle}</p>
+                      </div>
 
-<div class="menu">
-<img src="https://source.unsplash.com/400x400/?sausage" >
-<div class="menu-info">
-<div class="name">소세지야채볶음</div>
-<div class="desc">Sausage stir fry</div>
-<div class="price">17,000원</div>
-</div>
-</div>
+                      <LinkIcon className="h-4 w-4 text-stone-400 group-hover:text-red-300" />
+                    </CardContent>
+                  </Card>
+                </a>
+              );
+            })}
+          </section>
 
-<div class="menu">
-<img src="https://source.unsplash.com/400x400/?seafood-soup" >
-<div class="menu-info">
-<div class="name">해물 꽃게탕</div>
-<div class="desc">Seafood soup</div>
-<div class="price">21,000원</div>
-</div>
-</div>
+          <section className="px-4 pt-6 pb-4">
+            <div className="rounded-[1.5rem] border border-stone-500/45 bg-black/20 p-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-extrabold tracking-[0.24em] text-stone-200">MENU PREVIEW</h3>
+                <span className="text-xs text-stone-400">대표메뉴</span>
+              </div>
 
-<div class="menu">
-<img src="https://source.unsplash.com/400x400/?fried-chicken" >
-<div class="menu-info">
-<div class="name">순살치킨 & 감자튀김</div>
-<div class="desc">Chicken & fries</div>
-<div class="price">17,000원</div>
-</div>
-</div>
+              <div className="mt-4 grid grid-cols-2 gap-2">
+                {menuPreview.map((item) => (
+                  <MenuCard key={item.name} item={item} />
+                ))}
+              </div>
+            </div>
+          </section>
 
-<div class="menu">
-<img src="https://source.unsplash.com/400x400/?beef-tartare" >
-<div class="menu-info">
-<div class="name">육회</div>
-<div class="desc">Raw beef</div>
-<div class="price">19,000원</div>
-</div>
-</div>
-
-<div class="menu">
-<img src="https://source.unsplash.com/400x400/?stir-fry" >
-<div class="menu-info">
-<div class="name">마라차돌볶음</div>
-<div class="desc">Mala beef</div>
-<div class="price">17,000원</div>
-</div>
-</div>
-
-<div class="menu">
-<img src="https://source.unsplash.com/400x400/?kimchi-stew" >
-<div class="menu-info">
-<div class="name">돼지 김치찌개</div>
-<div class="desc">Kimchi stew</div>
-<div class="price">19,000원</div>
-</div>
-</div>
-
-<div class="menu">
-<img src="https://source.unsplash.com/400x400/?salad-chicken" >
-<div class="menu-info">
-<div class="name">윙 & 봉 샐러드</div>
-<div class="desc">Chicken salad</div>
-<div class="price">17,000원</div>
-</div>
-</div>
-
-<div class="menu">
-<img src="https://source.unsplash.com/400x400/?fishcake" >
-<div class="menu-info">
-<div class="name">오뎅탕</div>
-<div class="desc">Fish cake soup</div>
-<div class="price">18,000원</div>
-</div>
-</div>
-
-<div class="menu">
-<img src="https://source.unsplash.com/400x400/?sausage-plate" >
-<div class="menu-info">
-<div class="name">모듬 소세지 & 감튀</div>
-<div class="desc">Sausage set</div>
-<div class="price">17,000원</div>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</body>
-</html>
+          <section className="px-4 pb-6">
+            <div className="rounded-[1.5rem] border border-stone-500/40 bg-[linear-gradient(145deg,rgba(110,104,98,0.18),rgba(18,18,18,0.92))] p-5 text-center">
+              <p className="text-xs tracking-[0.24em] text-stone-400">SIGNATURE CTA</p>
+              <h3 className="mt-2 text-xl font-extrabold text-stone-100">커뮨33 메뉴 전체 보기</h3>
+              <p className="mt-2 text-sm leading-6 text-stone-300">
+                비컨의 가장 중요한 버튼은 가장 아래에서 강하게 보이도록 구성했습니다.
+              </p>
+              <Button className="mt-4 w-full rounded-2xl bg-[#a1332d] hover:bg-[#8e2c27] text-white h-12 text-base font-bold shadow-lg">
+                메뉴 사이트 바로가기
+              </Button>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  );
+}

@@ -1,272 +1,175 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>영단어 퀴즈 챌린지</title>
-    <style>
-        :root {
-            --primary: #4a90e2;
-            --success: #2ecc71;
-            --error: #e74c3c;
-            --bg: #f5f7fa;
-            --text: #2c3e50;
-        }
+<meta charset="UTF-8">
+<title>커뮨33 메뉴</title>
 
-        body {
-            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+<style>
+body {
+    margin:0;
+    font-family: 'Noto Sans KR', sans-serif;
+    background:#1e1e1e;
+    color:white;
+}
 
-        .container {
-            background: white;
-            width: 90%;
-            max-width: 500px;
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            text-align: center;
-        }
+.container {
+    max-width:1000px;
+    margin:50px auto;
+}
 
-        .hidden { display: none; }
+.title {
+    text-align:center;
+    font-size:40px;
+    margin-bottom:30px;
+}
 
-        /* 타이틀 & 정보 */
-        h1 { color: var(--primary); margin-bottom: 1.5rem; }
-        .info-bar {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 1rem;
-            font-weight: bold;
-            color: #7f8c8d;
-        }
+.menu-grid {
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:20px;
+}
 
-        /* 퀴즈 영역 */
-        .word { font-size: 2.5rem; font-weight: bold; margin: 1.5rem 0; color: var(--text); }
-        .options { display: grid; gap: 10px; }
-        .btn {
-            padding: 15px;
-            font-size: 1.1rem;
-            border: 2px solid #ecf0f1;
-            border-radius: 12px;
-            background: white;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .btn:hover:not(:disabled) { background: #f8f9fa; border-color: var(--primary); }
-        .btn.correct { background-color: var(--success) !important; color: white; border-color: var(--success); }
-        .btn.wrong { background-color: var(--error) !important; color: white; border-color: var(--error); }
+.menu {
+    background:#2c2c2c;
+    border-radius:15px;
+    padding:15px;
+    display:flex;
+    gap:15px;
+    align-items:center;
+}
 
-        /* 결과 & 랭킹 */
-        input {
-            width: 100%;
-            padding: 12px;
-            margin: 1rem 0;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-sizing: border-box;
-        }
-        .rank-list { text-align: left; margin-top: 1.5rem; border-top: 1px solid #eee; padding-top: 1rem; }
-        .rank-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f9f9f9; }
-        .rank-item:last-child { border: none; }
+.menu img {
+    width:120px;
+    height:120px;
+    border-radius:10px;
+    object-fit:cover;
+}
 
-        .main-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            font-size: 1rem;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-        }
-    </style>
+.menu-info {
+    flex:1;
+}
+
+.name {
+    font-size:18px;
+    font-weight:bold;
+}
+
+.desc {
+    font-size:13px;
+    color:#aaa;
+}
+
+.price {
+    color:#ff4d4d;
+    font-size:18px;
+    font-weight:bold;
+    margin-top:5px;
+}
+</style>
+
 </head>
+
 <body>
 
-    <div class="container">
-        <!-- 시작 화면 -->
-        <div id="start-screen">
-            <h1>영단어 퀴즈</h1>
-            <p>10개의 문제를 풀고 랭킹에 도전하세요!</p>
-            <button class="main-btn" onclick="startGame()">게임 시작</button>
-        </div>
+<div class="container">
 
-        <!-- 퀴즈 화면 -->
-        <div id="quiz-screen" class="hidden">
-            <div class="info-bar">
-                <span id="progress">1/10</span>
-                <span id="current-score">Score: 0</span>
-            </div>
-            <div class="word" id="question-word">Apple</div>
-            <div class="options" id="options-container">
-                <!-- 버튼들이 자바스크립트로 생성됨 -->
-            </div>
-        </div>
+<div class="title">🍺 커뮨33 MENU</div>
 
-        <!-- 결과 화면 -->
-        <div id="result-screen" class="hidden">
-            <h1>결과</h1>
-            <p style="font-size: 1.5rem;">최종 점수: <span id="final-score">0</span>점</p>
-            <input type="text" id="nickname" placeholder="닉네임을 입력하세요" maxlength="10">
-            <button class="main-btn" id="save-btn" onclick="saveScore()">점수 저장 및 랭킹 보기</button>
-            
-            <div id="ranking-board" class="hidden">
-                <h3>Top 5 랭킹</h3>
-                <div id="rank-items-container" class="rank-list"></div>
-                <button class="main-btn" style="background:#95a5a6;" onclick="location.reload()">다시 하기</button>
-            </div>
-        </div>
-    </div>
+<div class="menu-grid">
 
-    <!-- Firebase SDK -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+<div class="menu">
+<img src="https://source.unsplash.com/400x400/?chicken" >
+<div class="menu-info">
+<div class="name">숯불 닭구이</div>
+<div class="desc">Charcoal grilled chicken</div>
+<div class="price">21,000원</div>
+</div>
+</div>
 
-        // Firebase 설정
-        const firebaseConfig = {
-           apiKey: "AIzaSyBOkylsIXsSu-lYyA2mIy3KrwiPJmdQxYs",
-  authDomain: "my-quiz-game-bb093.firebaseapp.com",
-  projectId: "my-quiz-game-bb093",
-  storageBucket: "my-quiz-game-bb093.firebasestorage.app",
-  messagingSenderId: "708246597287",
-  appId: "1:708246597287:web:f0ecadd5c9ee81ee94f582"
-};        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+<div class="menu">
+<img src="https://source.unsplash.com/400x400/?sausage" >
+<div class="menu-info">
+<div class="name">소세지야채볶음</div>
+<div class="desc">Sausage stir fry</div>
+<div class="price">17,000원</div>
+</div>
+</div>
 
-        // 퀴즈 데이터 (10문제)
-        const quizData = [
-            { q: "Consistent", a: ["일관된", "거대한", "불안한", "명확한"], c: 0 },
-            { q: "Obvious", a: ["모호한", "분명한", "희귀한", "위험한"], c: 1 },
-            { q: "Interrupt", a: ["해석하다", "방해하다", "참여하다", "조사하다"], c: 1 },
-            { q: "Sufficient", a: ["부족한", "복잡한", "충분한", "적절한"], c: 2 },
-            { q: "Vivid", a: ["창백한", "지루한", "생생한", "어두운"], c: 2 },
-            { q: "Evaluate", a: ["평가하다", "제거하다", "도망치다", "모방하다"], c: 0 },
-            { q: "Precise", a: ["거친", "정확한", "느린", "다양한"], c: 1 },
-            { q: "Genuine", a: ["가짜의", "영리한", "진실한", "관대한"], c: 2 },
-            { q: "Consequence", a: ["자신감", "동기", "우연", "결과"], c: 3 },
-            { q: "Perspective", a: ["번영", "관점", "설득", "허가"], c: 1 }
-        ];
+<div class="menu">
+<img src="https://source.unsplash.com/400x400/?seafood-soup" >
+<div class="menu-info">
+<div class="name">해물 꽃게탕</div>
+<div class="desc">Seafood soup</div>
+<div class="price">21,000원</div>
+</div>
+</div>
 
-        let currentIdx = 0;
-        let score = 0;
-        let isChecking = false;
+<div class="menu">
+<img src="https://source.unsplash.com/400x400/?fried-chicken" >
+<div class="menu-info">
+<div class="name">순살치킨 & 감자튀김</div>
+<div class="desc">Chicken & fries</div>
+<div class="price">17,000원</div>
+</div>
+</div>
 
-        // 게임 시작
-        window.startGame = () => {
-            document.getElementById('start-screen').classList.add('hidden');
-            document.getElementById('quiz-screen').classList.remove('hidden');
-            showQuestion();
-        };
+<div class="menu">
+<img src="https://source.unsplash.com/400x400/?beef-tartare" >
+<div class="menu-info">
+<div class="name">육회</div>
+<div class="desc">Raw beef</div>
+<div class="price">19,000원</div>
+</div>
+</div>
 
-        // 문제 출력
-        function showQuestion() {
-            isChecking = false;
-            const q = quizData[currentIdx];
-            document.getElementById('progress').innerText = `${currentIdx + 1} / ${quizData.length}`;
-            document.getElementById('current-score').innerText = `Score: ${score}`;
-            document.getElementById('question-word').innerText = q.q;
-            
-            const container = document.getElementById('options-container');
-            container.innerHTML = '';
-            
-            q.a.forEach((opt, index) => {
-                const btn = document.createElement('button');
-                btn.className = 'btn';
-                btn.innerText = opt;
-                btn.onclick = () => checkAnswer(index, btn);
-                container.appendChild(btn);
-            });
-        }
+<div class="menu">
+<img src="https://source.unsplash.com/400x400/?stir-fry" >
+<div class="menu-info">
+<div class="name">마라차돌볶음</div>
+<div class="desc">Mala beef</div>
+<div class="price">17,000원</div>
+</div>
+</div>
 
-        // 정답 확인
-        function checkAnswer(selected, btn) {
-            if (isChecking) return;
-            isChecking = true;
+<div class="menu">
+<img src="https://source.unsplash.com/400x400/?kimchi-stew" >
+<div class="menu-info">
+<div class="name">돼지 김치찌개</div>
+<div class="desc">Kimchi stew</div>
+<div class="price">19,000원</div>
+</div>
+</div>
 
-            const correct = quizData[currentIdx].c;
-            const buttons = document.querySelectorAll('.btn');
+<div class="menu">
+<img src="https://source.unsplash.com/400x400/?salad-chicken" >
+<div class="menu-info">
+<div class="name">윙 & 봉 샐러드</div>
+<div class="desc">Chicken salad</div>
+<div class="price">17,000원</div>
+</div>
+</div>
 
-            if (selected === correct) {
-                btn.classList.add('correct');
-                score += 10;
-            } else {
-                btn.classList.add('wrong');
-                buttons[correct].classList.add('correct');
-            }
+<div class="menu">
+<img src="https://source.unsplash.com/400x400/?fishcake" >
+<div class="menu-info">
+<div class="name">오뎅탕</div>
+<div class="desc">Fish cake soup</div>
+<div class="price">18,000원</div>
+</div>
+</div>
 
-            setTimeout(() => {
-                currentIdx++;
-                if (currentIdx < quizData.length) {
-                    showQuestion();
-                } else {
-                    showResult();
-                }
-            }, 1200);
-        }
+<div class="menu">
+<img src="https://source.unsplash.com/400x400/?sausage-plate" >
+<div class="menu-info">
+<div class="name">모듬 소세지 & 감튀</div>
+<div class="desc">Sausage set</div>
+<div class="price">17,000원</div>
+</div>
+</div>
 
-        // 결과 화면
-        function showResult() {
-            document.getElementById('quiz-screen').classList.add('hidden');
-            document.getElementById('result-screen').classList.remove('hidden');
-            document.getElementById('final-score').innerText = score;
-        }
+</div>
 
-        // 점수 저장 (Firebase)
-        window.saveScore = async () => {
-            const nickname = document.getElementById('nickname').value.trim();
-            if (!nickname) {
-                alert('닉네임을 입력해주세요!');
-                return;
-            }
+</div>
 
-            const saveBtn = document.getElementById('save-btn');
-            saveBtn.disabled = true;
-            saveBtn.innerText = "저장 중...";
-
-            try {
-                await addDoc(collection(db, "scores"), {
-                    nickname: nickname,
-                    score: score,
-                    timestamp: serverTimestamp()
-                });
-                loadRanking();
-            } catch (e) {
-                console.error("Error adding document: ", e);
-                alert("저장에 실패했습니다.");
-                saveBtn.disabled = false;
-            }
-        };
-
-        // 랭킹 불러오기
-        async function loadRanking() {
-            const q = query(collection(db, "scores"), orderBy("score", "desc"), limit(5));
-            const querySnapshot = await getDocs(q);
-            
-            const container = document.getElementById('rank-items-container');
-            container.innerHTML = '';
-            
-            let rank = 1;
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                const item = document.createElement('div');
-                item.className = 'rank-item';
-                item.innerHTML = `<span>${rank}. ${data.nickname}</span><span>${data.score}점</span>`;
-                container.appendChild(item);
-                rank++;
-            });
-
-            document.getElementById('save-btn').classList.add('hidden');
-            document.getElementById('nickname').classList.add('hidden');
-            document.getElementById('ranking-board').classList.remove('hidden');
-        }
-    </script>
 </body>
 </html>
